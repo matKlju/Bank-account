@@ -1,0 +1,2 @@
+# pangaautomaat
+Imiteerime pangaautomaati
