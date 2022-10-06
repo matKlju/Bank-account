@@ -1,5 +1,6 @@
 
 
+from getpass import getpass
 
 pin = " "
 ballance = 3000.00
@@ -7,7 +8,7 @@ attempt = 3
 while pin != "2308" and attempt > 0:
     print("Sisesta PIN-kood:")
     print("Katseid jäänud: " + str(attempt))
-    pin = input()
+    pin = getpass()
     attempt -= 1
 
 
