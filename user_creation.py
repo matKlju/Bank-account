@@ -1,10 +1,12 @@
 from data import *
+from password import *
 
 
 class User:
 
-    def __init__(self, name, balance):
+    def __init__(self, name, psw, balance):
         self.name = name
+        self.psw = psw
         self.balance = balance
 
 
@@ -23,9 +25,9 @@ def old_account():
 def new_account():
     name = input('Name:\n>_')
     balance = '0'
+    psw = new_password()
 
-    # User object (name, balance)
-    account = User(name, balance)
+    account = User(name, psw, balance)
     return account
 
 
@@ -35,4 +37,3 @@ def get_user():
     if choice == '1':
         return new_account()
     return old_account()
-

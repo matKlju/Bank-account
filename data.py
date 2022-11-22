@@ -16,9 +16,10 @@ def read_data(name):
                 a = account.read()
 
             name = a[0]
-            balance = a[1]
+            psw = a[1]
+            balance = a[2]
 
-            account = User(name, balance)
+            account = User(name, psw, balance)
             # return User Object
             return account
 
