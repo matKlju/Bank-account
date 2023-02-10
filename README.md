@@ -1,2 +1,2 @@
-# Pangaautomaat
-Imiteerime pangaautomaati
+# Bank account
+imitating a bank account
