@@ -2,38 +2,36 @@
 
 new attempt for to simulate a bank account
 
+To_do:
+    check if file already exists
+    
+
 """
-import pyinputplus as pyip
-from user_account import *
+from sys import exit as sys_exit
+from pyinputplus import inputMenu
+from user_account import get_account, save_account
 
 
-def start_menu():
-    choice = pyip.inputMenu(['New account', 'Old account', 'Quit'], numbered=True)
+def main_menu():
+    """Main loop and choices"""
 
-    if choice == 'New account':
-        account = new_account()         # create new account
-    elif choice == 'Old account':
-        account = load_account()
-    else:
-        quit()
+    account = get_account()
 
-    return account
-
-
-def main_menu(account):
     while True:
+
         account.display_account()
-        choice = pyip.inputMenu(['Withdraw', 'Deposit', 'Quit'], numbered=True)
+        choice = inputMenu(['Withdraw', 'Deposit', 'Quit'], numbered=True)
 
         if choice == 'Withdraw':
-            account.withdraw()  # create new account
+            account.withdraw()
+
         elif choice == 'Deposit':
             account.deposit()
+
         else:
             save_account(account)
-            quit()
+            sys_exit()
 
 
 if __name__ == '__main__':
-    user = start_menu()
-    main_menu(user)
+    main_menu()

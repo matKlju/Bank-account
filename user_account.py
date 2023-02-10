@@ -5,10 +5,11 @@ user account module
 create user
 read user - load user
 update user - change, save user
-delete user
 
 """
 import pickle
+from sys import exit as sys_exit
+from pyinputplus import inputMenu, inputNum
 
 
 class Account:
@@ -20,17 +21,30 @@ class Account:
         self.password = password
 
     def display_account(self):
-        print(f'Account: {self.account_name}\nBalance: {self.balance}')
+        """Show account and Balance"""
+
+        print(f'\nAccount: {self.account_name}\nBalance: {self.balance} €')
 
     def display_balance(self):
-        print(f'Balance: {self.balance}')
+        """Show only balance"""
+
+        print(f'\nBalance: {self.balance} €')
 
     def withdraw(self):
-        amount = float(input('Amount: '))
-        self.balance -= amount
+        """Take money out"""
+
+        while True:
+            amount = inputNum('Amount: ', min=0)
+            if amount > self.balance:
+                print('Not enough resources!')
+            else:
+                self.balance -= amount
+                break
 
     def deposit(self):
-        amount = float(input('Amount: '))
+        """Put money in"""
+
+        amount = inputNum('Amount: ', min=0)
         self.balance += amount
 
 
@@ -41,16 +55,34 @@ def save_account(user):
         pickle.dump(user, save_file)
 
 
+def _check_password(account):
+    """Validate password"""
+
+    tries = 3
+    while tries > 0:
+        user_password = input(f'Attempts x{tries}\nEnter password: ')
+        if user_password == account.password:
+            print('Correct')
+            return True
+        print('Incorrect password!')
+        tries -= 1
+
+
 def load_account():
     """Load pickled file"""
+
     while True:
         account_name = input('Account name: ')
-        if account_name == 'Q':
-            break
+
         try:
             with open(f'{account_name}.dat', 'rb') as load_file:
                 account = pickle.load(load_file)
-            return account
+
+            if _check_password(account):
+                return account
+
+            print('Access denied!\nTry again')
+            break
 
         except FileNotFoundError:
             print('File not found')
@@ -62,6 +94,7 @@ def _assign_password():
     while True:
         new_pwd = input('Password: ')
         check_pwd = input('Repeat password: ')
+
         if check_pwd == new_pwd:
             return new_pwd
 
@@ -69,8 +102,25 @@ def _assign_password():
 def new_account():
     """Create new account"""
 
-    account_name = input('Name: ')              # account name
-    psw = _assign_password()                     # assign and verify password
+    account_name = input('Name: ').lower()             # account name
+
+    psw = _assign_password()                    # assign and verify password
     user_account = Account(account_name, psw)   # create user account object
     save_account(user_account)
+
     return user_account
+
+
+def get_account():
+    """Return account object"""
+
+    choice = inputMenu(['New account', 'Old account', 'Quit'], numbered=True)
+
+    if choice == 'New account':
+        return new_account()         # create new account
+
+    if choice == 'Old account':
+        return load_account()        # load old account
+
+    if choice == 'Quit':
+        sys_exit()
